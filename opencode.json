@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "n8n-mcp": {
+      "type": "local",
+      "command": [
+        "node",
+        "./scripts/n8n-mcp-bridge.mjs"
+      ],
+      "enabled": true,
+      "timeout": 120000
+    }
+  }
+}
