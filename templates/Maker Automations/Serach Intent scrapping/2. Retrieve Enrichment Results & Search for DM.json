@@ -1,0 +1,2024 @@
+{
+    "name": "2. Retrieve Enrichment Results & Search for DM",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 1956295,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -249,
+                    "y": 2
+                },
+                "restore": {
+                    "parameters": {
+                        "hook": {
+                            "data": {
+                                "editable": "true"
+                            },
+                            "label": "Example Anymailfinder Webhook Callback"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:gateway-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "perplexity-ai:createAChatCompletion",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 3769066
+            },
+            "filter": {
+                "name": "Found?",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{1.result.email}}",
+                            "o": "exist"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "model": "llama-3.1-sonar-small-128k-online",
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": "{{1.result.personFullName}} {{1.result.personJobTitle}} {{1.input.companyName}}"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 54,
+                    "y": 0,
+                    "name": "Research DM"
+                },
+                "restore": {
+                    "expect": {
+                        "model": {
+                            "mode": "chose",
+                            "label": "llama-3.1-sonar-small-128k-online"
+                        },
+                        "messages": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    }
+                                }
+                            ]
+                        },
+                        "return_images": {
+                            "mode": "chose"
+                        },
+                        "search_domain_filter": {
+                            "mode": "chose"
+                        },
+                        "search_recency_filter": {
+                            "mode": "chose",
+                            "label": "Empty"
+                        },
+                        "return_related_questions": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "perplexity-ai"
+                            },
+                            "label": "nick@leftclick.ai"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:perplexity-ai",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true
+                    },
+                    {
+                        "name": "messages",
+                        "spec": [
+                            {
+                                "name": "content",
+                                "type": "text",
+                                "label": "Content",
+                                "required": true
+                            },
+                            {
+                                "name": "role",
+                                "type": "select",
+                                "label": "Role",
+                                "options": [
+                                    {
+                                        "label": "User",
+                                        "value": "user"
+                                    },
+                                    {
+                                        "label": "Assistant",
+                                        "value": "assistant"
+                                    },
+                                    {
+                                        "label": "System",
+                                        "value": "system"
+                                    }
+                                ],
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true
+                    },
+                    {
+                        "name": "max_tokens",
+                        "type": "number",
+                        "label": "Max Tokens"
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "number",
+                        "label": "Temperature",
+                        "validate": {
+                            "max": 1.999,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "top_p",
+                        "type": "number",
+                        "label": "Top P",
+                        "validate": {
+                            "max": 1,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "top_k",
+                        "type": "number",
+                        "label": "Top K",
+                        "validate": {
+                            "max": 2048,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "presence_penalty",
+                        "type": "number",
+                        "label": "Presence Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "frequency_penalty",
+                        "type": "number",
+                        "label": "Frequency Penalty",
+                        "validate": {
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "search_domain_filter",
+                        "spec": {
+                            "name": "value",
+                            "type": "text"
+                        },
+                        "type": "array",
+                        "label": "Search Domain Filter"
+                    },
+                    {
+                        "name": "search_recency_filter",
+                        "type": "select",
+                        "label": "Search Recency Filter",
+                        "validate": {
+                            "enum": [
+                                "month",
+                                "week",
+                                "day",
+                                "hour"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "return_images",
+                        "type": "boolean",
+                        "label": "Return Images"
+                    },
+                    {
+                        "name": "return_related_questions",
+                        "type": "boolean",
+                        "label": "Return Related Questions"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "openai-gpt-3:CreateCompletion",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 1134482
+            },
+            "filter": {
+                "name": "Length > 500?",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{length(2.choices[].message.content)}}",
+                            "b": "500",
+                            "o": "number:greater"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "model": "gpt-4o",
+                "top_p": "1",
+                "select": "chat",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You're an intelligent, helpful writing assistant."
+                    },
+                    {
+                        "role": "user",
+                        "content": "Write an icebreaker—a one line, customized introduction—for a cold email campaign. \n\nUse the provided data (from a Google search) as context. \n\nGuidelines:\n1. Your tone of voice should be \"casual bar conversation\" and very spartan. No fancy language.\n2. Look for plausible (but vague) connections wherever possible.\n3. Respond in JSON only. Use this format: {\"icebreaker\":\"\"} \n4. No exclamation points. No questions. Don't be overly excited.\n\nExample icebreaker:\n\n\"Hey Jamie,\\n\\Love the mission. Also believe strongly in what you talk about on your pod (small team sizes and minimizing meetings).\"",
+                        "imageDetail": "auto"
+                    },
+                    {
+                        "role": "user",
+                        "content": "{\"context\":\"Erez Druk is the Co-Founder and CEO of Freed, an AI startup dedicated to transforming the lives of healthcare professionals by automating the process of managing electronic health records (EHRs). Here are some key points about Erez Druk and Freed:1. **Background and Inspiration**: - Erez Druk was inspired to found Freed after witnessing his wife, a clinician, struggle with the administrative tasks associated with EHRs. This led him to create an AI medical scribe that could help clinicians focus on patient care rather than paperwork[1][2].2. **Mission and Impact**:- Freed's mission is to free clinicians from the burden of manually managing EHRs, thereby reducing burnout and improving the quality of care. The company has seen significant growth, reaching $10 million in ARR in its first year and serving over 10,000 clinicians[1][2].3. **Product and Technology**:   - Freed's AI medical scribe listens to patient visits and transcribes them into clinically accurate and useful medical notes. The product is designed to learn the clinician's style and format with every edit, ensuring customized notes in seconds. It supports multiple languages and can handle both virtual and office visits[4].4. **Scaling and Challenges**:- Erez Druk emphasizes the importance of obsessing over user needs, building a simple and effective product, and hiring the right people. He also highlights the challenges of creating a highly differentiated product in a competitive space, requiring rapid product velocity and the ability to create new value quickly[1][2].5. **Hiring and Culture**:- Freed is actively hiring for various roles, including Full-Stack Engineer, Frontend Engineer, System Engineer, AI Engineer, and Product Designer. The company values building a robust and useful product for clinicians and is looking for entrepreneurs who can help them create new product lines[2][3].6. **Personal Background**  - Erez Druk is a second-time founder who has previously worked at Facebook and founded UrbanLeap. He is passionate about building durable startup frameworks and has shared insights on various aspects of startup life through his blog[3].\"}",
+                        "imageDetail": "auto"
+                    },
+                    {
+                        "role": "assistant",
+                        "content": "{\"icebreaker\":\"\"Hey Erez,\\n\\nLove the mission behind Freed—also resonate deeply with the frameworks you talk about on your blog.\"}"
+                    },
+                    {
+                        "role": "user",
+                        "content": "{\"context\":\"{{replace(2.choices[].message.content; newline; space)}}\"}",
+                        "imageDetail": "auto"
+                    }
+                ],
+                "max_tokens": "300",
+                "temperature": "0.6",
+                "n_completions": "1",
+                "response_format": "json_object",
+                "frequency_penalty": "0.3",
+                "parseJSONResponse": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 363,
+                    "y": -6,
+                    "name": "Generate Icebreaker"
+                },
+                "restore": {
+                    "expect": {
+                        "stop": {
+                            "mode": "chose"
+                        },
+                        "model": {
+                            "mode": "chose",
+                            "label": "gpt-4o (system)"
+                        },
+                        "select": {
+                            "label": "Create a Chat Completion (GPT and o1 models)"
+                        },
+                        "messages": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "System"
+                                    }
+                                },
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    },
+                                    "imageDetail": {
+                                        "mode": "chose",
+                                        "label": "Auto"
+                                    },
+                                    "imageInputType": {
+                                        "mode": "chose",
+                                        "label": "Empty"
+                                    }
+                                },
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    },
+                                    "imageDetail": {
+                                        "mode": "chose",
+                                        "label": "Auto"
+                                    },
+                                    "imageInputType": {
+                                        "mode": "chose",
+                                        "label": "Empty"
+                                    }
+                                },
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "Assistant"
+                                    }
+                                },
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    },
+                                    "imageDetail": {
+                                        "mode": "chose",
+                                        "label": "Auto"
+                                    },
+                                    "imageInputType": {
+                                        "mode": "chose",
+                                        "label": "Empty"
+                                    }
+                                }
+                            ]
+                        },
+                        "logit_bias": {
+                            "mode": "chose"
+                        },
+                        "response_format": {
+                            "mode": "chose",
+                            "label": "JSON Object"
+                        },
+                        "parseJSONResponse": {
+                            "mode": "chose"
+                        },
+                        "additionalParameters": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "openai-gpt-3"
+                            },
+                            "label": "1SecondCopy"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:openai-gpt-3",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Select Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "chat",
+                                "prompt"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "number",
+                        "label": "Temperature",
+                        "validate": {
+                            "max": 2,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "top_p",
+                        "type": "number",
+                        "label": "Top P",
+                        "validate": {
+                            "max": 1,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "n_completions",
+                        "type": "number",
+                        "label": "Number"
+                    },
+                    {
+                        "name": "frequency_penalty",
+                        "type": "number",
+                        "label": "Frequency Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "presence_penalty",
+                        "type": "number",
+                        "label": "Presence Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "logit_bias",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "token",
+                                    "type": "text",
+                                    "label": "Token ID",
+                                    "required": true
+                                },
+                                {
+                                    "name": "probability",
+                                    "type": "number",
+                                    "label": "Probability",
+                                    "required": true,
+                                    "validate": {
+                                        "max": 100,
+                                        "min": -100
+                                    }
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Token Probability"
+                        },
+                        "type": "array",
+                        "label": "Token Probability"
+                    },
+                    {
+                        "name": "seed",
+                        "type": "integer",
+                        "label": "Seed"
+                    },
+                    {
+                        "name": "stop",
+                        "spec": {
+                            "name": "value",
+                            "type": "text",
+                            "label": "Stop Sequence"
+                        },
+                        "type": "array",
+                        "label": "Stop Sequences",
+                        "validate": {
+                            "maxItems": 4
+                        }
+                    },
+                    {
+                        "name": "additionalParameters",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "key",
+                                    "type": "text",
+                                    "label": "Parameter Name",
+                                    "required": true
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "select",
+                                    "label": "Input Type",
+                                    "options": [
+                                        {
+                                            "label": "Text",
+                                            "value": "text",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ],
+                                            "default": true
+                                        },
+                                        {
+                                            "label": "Number",
+                                            "value": "number",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "number",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Boolean",
+                                            "value": "boolean",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "boolean",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Date",
+                                            "value": "date",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "date",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Any",
+                                            "value": "any",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "any",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Input Parameter"
+                        },
+                        "type": "array",
+                        "label": "Other Input Parameters"
+                    },
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true
+                    },
+                    {
+                        "name": "max_tokens",
+                        "type": "uinteger",
+                        "label": "Max Completion Tokens"
+                    },
+                    {
+                        "name": "messages",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "role",
+                                    "type": "select",
+                                    "label": "Role",
+                                    "options": {
+                                        "store": [
+                                            {
+                                                "label": "System",
+                                                "value": "system",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "User",
+                                                "value": "user",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    },
+                                                    {
+                                                        "name": "imageInputType",
+                                                        "type": "select",
+                                                        "label": "Image Input Type",
+                                                        "options": [
+                                                            {
+                                                                "label": "URL",
+                                                                "value": "url",
+                                                                "nested": [
+                                                                    {
+                                                                        "help": "Make sure to use a publically accessible URL.\nYou can test if your image is publically accessible by opening the link in an incognito tab.",
+                                                                        "name": "imageUrl",
+                                                                        "type": "url",
+                                                                        "label": "Image URL"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "label": "Image File",
+                                                                "value": "file",
+                                                                "nested": [
+                                                                    {
+                                                                        "name": "imageFile",
+                                                                        "spec": [
+                                                                            {
+                                                                                "help": "Accepted extensions: `.jpg`, `.jpeg`, `.png`, `.webp` and `.gif`.",
+                                                                                "name": "imageFilename",
+                                                                                "type": "filename",
+                                                                                "label": "Image Filename",
+                                                                                "semantic": "file:name",
+                                                                                "extension": [
+                                                                                    "jpg",
+                                                                                    "jpeg",
+                                                                                    "png",
+                                                                                    "webp",
+                                                                                    "gif"
+                                                                                ]
+                                                                            },
+                                                                            {
+                                                                                "name": "imageData",
+                                                                                "type": "buffer",
+                                                                                "label": "Image Data",
+                                                                                "semantic": "file:data"
+                                                                            }
+                                                                        ],
+                                                                        "type": "collection",
+                                                                        "label": "Image"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "mappable": false
+                                                    },
+                                                    {
+                                                        "name": "imageDetail",
+                                                        "type": "select",
+                                                        "label": "Image Detail",
+                                                        "options": [
+                                                            {
+                                                                "label": "Auto",
+                                                                "value": "auto",
+                                                                "default": true
+                                                            },
+                                                            {
+                                                                "label": "High",
+                                                                "value": "high"
+                                                            },
+                                                            {
+                                                                "label": "Low",
+                                                                "value": "low"
+                                                            }
+                                                        ],
+                                                        "advanced": true
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Assistant",
+                                                "value": "assistant",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "required": true
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Message"
+                        },
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true
+                    },
+                    {
+                        "name": "response_format",
+                        "type": "select",
+                        "label": "Response Format",
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "json_object"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseJSONResponse",
+                        "type": "boolean",
+                        "label": "Parse JSON Response",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "result",
+                        "type": "any",
+                        "label": "Result"
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "object",
+                        "type": "text",
+                        "label": "Object"
+                    },
+                    {
+                        "name": "created",
+                        "type": "date",
+                        "label": "Created"
+                    },
+                    {
+                        "name": "model",
+                        "type": "text",
+                        "label": "Model"
+                    },
+                    {
+                        "name": "choices",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "text",
+                                    "type": "text",
+                                    "label": "Text"
+                                },
+                                {
+                                    "name": "index",
+                                    "type": "number",
+                                    "label": "Index"
+                                },
+                                {
+                                    "name": "logprobs",
+                                    "type": "text",
+                                    "label": "Log Probs"
+                                },
+                                {
+                                    "name": "finish_reason",
+                                    "type": "text",
+                                    "label": "Finish Reason"
+                                },
+                                {
+                                    "name": "message",
+                                    "spec": [
+                                        {
+                                            "name": "role",
+                                            "type": "text",
+                                            "label": "Role"
+                                        },
+                                        {
+                                            "name": "content",
+                                            "type": "text",
+                                            "label": "Content"
+                                        },
+                                        {
+                                            "name": "refusal",
+                                            "type": "text",
+                                            "label": "Refusal"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Message"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Choices"
+                    },
+                    {
+                        "name": "usage",
+                        "spec": [
+                            {
+                                "name": "prompt_tokens",
+                                "type": "number",
+                                "label": "Prompt Tokens"
+                            },
+                            {
+                                "name": "completion_tokens",
+                                "type": "text",
+                                "label": "Completion Tokens"
+                            },
+                            {
+                                "name": "total_tokens",
+                                "type": "number",
+                                "label": "Total Tokens"
+                            },
+                            {
+                                "name": "prompt_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "cached_tokens",
+                                        "type": "uinteger",
+                                        "label": "Cached Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "image_tokens",
+                                        "type": "uinteger",
+                                        "label": "Image Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Prompt Tokens Details"
+                            },
+                            {
+                                "name": "completion_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "reasoning_tokens",
+                                        "type": "uinteger",
+                                        "label": "Reasoning Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Completion Tokens Details"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Usage"
+                    },
+                    {
+                        "name": "system_fingerprint",
+                        "type": "text",
+                        "label": "System Fingerprint"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 4,
+            "module": "google-sheets:updateRow",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 1548308
+            },
+            "mapper": {
+                "from": "drive",
+                "mode": "select",
+                "values": {
+                    "26": "{{1.result.personFullName}}",
+                    "27": "{{1.result.email}}",
+                    "28": "{{1.result.personJobTitle}}",
+                    "29": "{{1.result.personLinkedinUrl}}",
+                    "30": "{{3.result.icebreaker}}"
+                },
+                "sheetId": "Sheet1",
+                "rowNumber": "{{1.input.rowNumber}}",
+                "spreadsheetId": "/1O5nDbOrE8KbumlqNqKeDX2NpsOMBj-1pnXSRozgd8aQ",
+                "includesHeaders": true,
+                "valueInputOption": "USER_ENTERED"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 663,
+                    "y": -6,
+                    "name": "Add to DB"
+                },
+                "restore": {
+                    "expect": {
+                        "from": {
+                            "label": "My Drive"
+                        },
+                        "mode": {
+                            "label": "Search by path"
+                        },
+                        "sheetId": {
+                            "label": "Sheet1"
+                        },
+                        "spreadsheetId": {
+                            "path": [
+                                "Search Intent Scraper Database"
+                            ]
+                        },
+                        "includesHeaders": {
+                            "label": "Yes",
+                            "nested": [
+                                {
+                                    "name": "values",
+                                    "spec": [
+                                        {
+                                            "name": "0",
+                                            "type": "text",
+                                            "label": "id (A)"
+                                        },
+                                        {
+                                            "name": "1",
+                                            "type": "text",
+                                            "label": "trackingId (B)"
+                                        },
+                                        {
+                                            "name": "2",
+                                            "type": "text",
+                                            "label": "refId (C)"
+                                        },
+                                        {
+                                            "name": "3",
+                                            "type": "text",
+                                            "label": "link (D)"
+                                        },
+                                        {
+                                            "name": "4",
+                                            "type": "text",
+                                            "label": "title (E)"
+                                        },
+                                        {
+                                            "name": "5",
+                                            "type": "text",
+                                            "label": "companyName (F)"
+                                        },
+                                        {
+                                            "name": "6",
+                                            "type": "text",
+                                            "label": "companyLinkedinUrl (G)"
+                                        },
+                                        {
+                                            "name": "7",
+                                            "type": "text",
+                                            "label": "companyLogo (H)"
+                                        },
+                                        {
+                                            "name": "8",
+                                            "type": "text",
+                                            "label": "location (I)"
+                                        },
+                                        {
+                                            "name": "9",
+                                            "type": "text",
+                                            "label": "salaryInfoArray (J)"
+                                        },
+                                        {
+                                            "name": "10",
+                                            "type": "text",
+                                            "label": "postedAt (K)"
+                                        },
+                                        {
+                                            "name": "11",
+                                            "type": "text",
+                                            "label": "benefitsArray (L)"
+                                        },
+                                        {
+                                            "name": "12",
+                                            "type": "text",
+                                            "label": "descriptionHtml (M)"
+                                        },
+                                        {
+                                            "name": "13",
+                                            "type": "text",
+                                            "label": "applicantsCount (N)"
+                                        },
+                                        {
+                                            "name": "14",
+                                            "type": "text",
+                                            "label": "applyUrl (O)"
+                                        },
+                                        {
+                                            "name": "15",
+                                            "type": "text",
+                                            "label": "descriptionText (P)"
+                                        },
+                                        {
+                                            "name": "16",
+                                            "type": "text",
+                                            "label": "seniorityLevel (Q)"
+                                        },
+                                        {
+                                            "name": "17",
+                                            "type": "text",
+                                            "label": "employmentType (R)"
+                                        },
+                                        {
+                                            "name": "18",
+                                            "type": "text",
+                                            "label": "jobFunction (S)"
+                                        },
+                                        {
+                                            "name": "19",
+                                            "type": "text",
+                                            "label": "industries (T)"
+                                        },
+                                        {
+                                            "name": "20",
+                                            "type": "text",
+                                            "label": "inputUrl (U)"
+                                        },
+                                        {
+                                            "name": "21",
+                                            "type": "text",
+                                            "label": "companyDescription (V)"
+                                        },
+                                        {
+                                            "name": "22",
+                                            "type": "text",
+                                            "label": "companyAddressCollection (W)"
+                                        },
+                                        {
+                                            "name": "23",
+                                            "type": "text",
+                                            "label": "companyWebsite (X)"
+                                        },
+                                        {
+                                            "name": "24",
+                                            "type": "text",
+                                            "label": "companySlogan (Y)"
+                                        },
+                                        {
+                                            "name": "25",
+                                            "type": "text",
+                                            "label": "companyEmployeesCount (Z)"
+                                        },
+                                        {
+                                            "name": "26",
+                                            "type": "text",
+                                            "label": "personFullName (AA)"
+                                        },
+                                        {
+                                            "name": "27",
+                                            "type": "text",
+                                            "label": "email (AB)"
+                                        },
+                                        {
+                                            "name": "28",
+                                            "type": "text",
+                                            "label": "jobTitle (AC)"
+                                        },
+                                        {
+                                            "name": "29",
+                                            "type": "text",
+                                            "label": "linkedInUrl (AD)"
+                                        },
+                                        {
+                                            "name": "30",
+                                            "type": "text",
+                                            "label": "icebreaker (AE)"
+                                        },
+                                        {
+                                            "name": "31",
+                                            "type": "text",
+                                            "label": "addedToCampaign? (AF)"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Values"
+                                }
+                            ]
+                        },
+                        "valueInputOption": {
+                            "mode": "chose",
+                            "label": "User entered"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "nick@leftclick.ai (nick@leftclick.ai)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valueInputOption",
+                        "type": "select",
+                        "label": "Value input option",
+                        "validate": {
+                            "enum": [
+                                "USER_ENTERED",
+                                "RAW"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Drive",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "file",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "rowNumber",
+                        "type": "uinteger",
+                        "label": "Row number",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "values",
+                        "spec": [
+                            {
+                                "name": "0",
+                                "type": "text",
+                                "label": "id (A)"
+                            },
+                            {
+                                "name": "1",
+                                "type": "text",
+                                "label": "trackingId (B)"
+                            },
+                            {
+                                "name": "2",
+                                "type": "text",
+                                "label": "refId (C)"
+                            },
+                            {
+                                "name": "3",
+                                "type": "text",
+                                "label": "link (D)"
+                            },
+                            {
+                                "name": "4",
+                                "type": "text",
+                                "label": "title (E)"
+                            },
+                            {
+                                "name": "5",
+                                "type": "text",
+                                "label": "companyName (F)"
+                            },
+                            {
+                                "name": "6",
+                                "type": "text",
+                                "label": "companyLinkedinUrl (G)"
+                            },
+                            {
+                                "name": "7",
+                                "type": "text",
+                                "label": "companyLogo (H)"
+                            },
+                            {
+                                "name": "8",
+                                "type": "text",
+                                "label": "location (I)"
+                            },
+                            {
+                                "name": "9",
+                                "type": "text",
+                                "label": "salaryInfoArray (J)"
+                            },
+                            {
+                                "name": "10",
+                                "type": "text",
+                                "label": "postedAt (K)"
+                            },
+                            {
+                                "name": "11",
+                                "type": "text",
+                                "label": "benefitsArray (L)"
+                            },
+                            {
+                                "name": "12",
+                                "type": "text",
+                                "label": "descriptionHtml (M)"
+                            },
+                            {
+                                "name": "13",
+                                "type": "text",
+                                "label": "applicantsCount (N)"
+                            },
+                            {
+                                "name": "14",
+                                "type": "text",
+                                "label": "applyUrl (O)"
+                            },
+                            {
+                                "name": "15",
+                                "type": "text",
+                                "label": "descriptionText (P)"
+                            },
+                            {
+                                "name": "16",
+                                "type": "text",
+                                "label": "seniorityLevel (Q)"
+                            },
+                            {
+                                "name": "17",
+                                "type": "text",
+                                "label": "employmentType (R)"
+                            },
+                            {
+                                "name": "18",
+                                "type": "text",
+                                "label": "jobFunction (S)"
+                            },
+                            {
+                                "name": "19",
+                                "type": "text",
+                                "label": "industries (T)"
+                            },
+                            {
+                                "name": "20",
+                                "type": "text",
+                                "label": "inputUrl (U)"
+                            },
+                            {
+                                "name": "21",
+                                "type": "text",
+                                "label": "companyDescription (V)"
+                            },
+                            {
+                                "name": "22",
+                                "type": "text",
+                                "label": "companyAddressCollection (W)"
+                            },
+                            {
+                                "name": "23",
+                                "type": "text",
+                                "label": "companyWebsite (X)"
+                            },
+                            {
+                                "name": "24",
+                                "type": "text",
+                                "label": "companySlogan (Y)"
+                            },
+                            {
+                                "name": "25",
+                                "type": "text",
+                                "label": "companyEmployeesCount (Z)"
+                            },
+                            {
+                                "name": "26",
+                                "type": "text",
+                                "label": "personFullName (AA)"
+                            },
+                            {
+                                "name": "27",
+                                "type": "text",
+                                "label": "email (AB)"
+                            },
+                            {
+                                "name": "28",
+                                "type": "text",
+                                "label": "jobTitle (AC)"
+                            },
+                            {
+                                "name": "29",
+                                "type": "text",
+                                "label": "linkedInUrl (AD)"
+                            },
+                            {
+                                "name": "30",
+                                "type": "text",
+                                "label": "icebreaker (AE)"
+                            },
+                            {
+                                "name": "31",
+                                "type": "text",
+                                "label": "addedToCampaign? (AF)"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Values"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "instantly:addLeadToCampaign",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 3769098
+            },
+            "filter": {
+                "name": "Not in Campaign?",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{1.input.campaignStatus}}",
+                            "b": "true",
+                            "o": "text:notequal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "email": "{{1.result.email}}",
+                "website": "{{1.input.domain}}",
+                "last_name": "{{get(split(1.result.personFullName; space); 2)}}",
+                "first_name": "{{get(split(1.result.personFullName; space); 1)}}",
+                "campaign_id": "a2a265df-2938-45e1-81ae-31380b3c87f8",
+                "personalization": "{{3.result.icebreaker}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 968,
+                    "y": -11
+                },
+                "restore": {
+                    "expect": {
+                        "campaign_id": {
+                            "mode": "chose",
+                            "label": "Test Campaign"
+                        },
+                        "custom_variables": {
+                            "mode": "chose"
+                        },
+                        "skip_if_in_workspace": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "instantly"
+                            },
+                            "label": "info@leftclick.ai (Dec 11 2024)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:instantly",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "campaign_id",
+                        "type": "select",
+                        "label": "Campaign ID",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "type": "email",
+                        "label": "Lead Email",
+                        "required": true
+                    },
+                    {
+                        "name": "first_name",
+                        "type": "text",
+                        "label": "First Name"
+                    },
+                    {
+                        "name": "last_name",
+                        "type": "text",
+                        "label": "Last Name"
+                    },
+                    {
+                        "name": "company_name",
+                        "type": "text",
+                        "label": "Company Name"
+                    },
+                    {
+                        "name": "personalization",
+                        "type": "text",
+                        "label": "Personalization"
+                    },
+                    {
+                        "name": "phone",
+                        "type": "text",
+                        "label": "Phone"
+                    },
+                    {
+                        "name": "website",
+                        "type": "url",
+                        "label": "Website"
+                    },
+                    {
+                        "name": "custom_variables",
+                        "spec": {
+                            "name": "value",
+                            "spec": [
+                                {
+                                    "name": "key",
+                                    "type": "text",
+                                    "label": "Custom Variable Key"
+                                },
+                                {
+                                    "name": "value",
+                                    "type": "text",
+                                    "label": "Custom Variable Value"
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Custom Variable"
+                        },
+                        "type": "array",
+                        "label": "Custom Variables"
+                    },
+                    {
+                        "name": "skip_if_in_workspace",
+                        "type": "boolean",
+                        "label": "Skip if in Workspace"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "google-sheets:updateRow",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 1548308
+            },
+            "mapper": {
+                "from": "drive",
+                "mode": "select",
+                "values": {
+                    "31": "true"
+                },
+                "sheetId": "Sheet1",
+                "rowNumber": "{{1.input.rowNumber}}",
+                "spreadsheetId": "/1O5nDbOrE8KbumlqNqKeDX2NpsOMBj-1pnXSRozgd8aQ",
+                "includesHeaders": true,
+                "valueInputOption": "USER_ENTERED"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1268,
+                    "y": -5,
+                    "name": "Update \"Added to Campaign\" Column"
+                },
+                "restore": {
+                    "expect": {
+                        "from": {
+                            "label": "My Drive"
+                        },
+                        "mode": {
+                            "label": "Search by path"
+                        },
+                        "sheetId": {
+                            "label": "Sheet1"
+                        },
+                        "spreadsheetId": {
+                            "path": [
+                                "Search Intent Scraper Database"
+                            ]
+                        },
+                        "includesHeaders": {
+                            "label": "Yes",
+                            "nested": [
+                                {
+                                    "name": "values",
+                                    "spec": [
+                                        {
+                                            "name": "0",
+                                            "type": "text",
+                                            "label": "id (A)"
+                                        },
+                                        {
+                                            "name": "1",
+                                            "type": "text",
+                                            "label": "trackingId (B)"
+                                        },
+                                        {
+                                            "name": "2",
+                                            "type": "text",
+                                            "label": "refId (C)"
+                                        },
+                                        {
+                                            "name": "3",
+                                            "type": "text",
+                                            "label": "link (D)"
+                                        },
+                                        {
+                                            "name": "4",
+                                            "type": "text",
+                                            "label": "title (E)"
+                                        },
+                                        {
+                                            "name": "5",
+                                            "type": "text",
+                                            "label": "companyName (F)"
+                                        },
+                                        {
+                                            "name": "6",
+                                            "type": "text",
+                                            "label": "companyLinkedinUrl (G)"
+                                        },
+                                        {
+                                            "name": "7",
+                                            "type": "text",
+                                            "label": "companyLogo (H)"
+                                        },
+                                        {
+                                            "name": "8",
+                                            "type": "text",
+                                            "label": "location (I)"
+                                        },
+                                        {
+                                            "name": "9",
+                                            "type": "text",
+                                            "label": "salaryInfoArray (J)"
+                                        },
+                                        {
+                                            "name": "10",
+                                            "type": "text",
+                                            "label": "postedAt (K)"
+                                        },
+                                        {
+                                            "name": "11",
+                                            "type": "text",
+                                            "label": "benefitsArray (L)"
+                                        },
+                                        {
+                                            "name": "12",
+                                            "type": "text",
+                                            "label": "descriptionHtml (M)"
+                                        },
+                                        {
+                                            "name": "13",
+                                            "type": "text",
+                                            "label": "applicantsCount (N)"
+                                        },
+                                        {
+                                            "name": "14",
+                                            "type": "text",
+                                            "label": "applyUrl (O)"
+                                        },
+                                        {
+                                            "name": "15",
+                                            "type": "text",
+                                            "label": "descriptionText (P)"
+                                        },
+                                        {
+                                            "name": "16",
+                                            "type": "text",
+                                            "label": "seniorityLevel (Q)"
+                                        },
+                                        {
+                                            "name": "17",
+                                            "type": "text",
+                                            "label": "employmentType (R)"
+                                        },
+                                        {
+                                            "name": "18",
+                                            "type": "text",
+                                            "label": "jobFunction (S)"
+                                        },
+                                        {
+                                            "name": "19",
+                                            "type": "text",
+                                            "label": "industries (T)"
+                                        },
+                                        {
+                                            "name": "20",
+                                            "type": "text",
+                                            "label": "inputUrl (U)"
+                                        },
+                                        {
+                                            "name": "21",
+                                            "type": "text",
+                                            "label": "companyDescription (V)"
+                                        },
+                                        {
+                                            "name": "22",
+                                            "type": "text",
+                                            "label": "companyAddressCollection (W)"
+                                        },
+                                        {
+                                            "name": "23",
+                                            "type": "text",
+                                            "label": "companyWebsite (X)"
+                                        },
+                                        {
+                                            "name": "24",
+                                            "type": "text",
+                                            "label": "companySlogan (Y)"
+                                        },
+                                        {
+                                            "name": "25",
+                                            "type": "text",
+                                            "label": "companyEmployeesCount (Z)"
+                                        },
+                                        {
+                                            "name": "26",
+                                            "type": "text",
+                                            "label": "personFullName (AA)"
+                                        },
+                                        {
+                                            "name": "27",
+                                            "type": "text",
+                                            "label": "email (AB)"
+                                        },
+                                        {
+                                            "name": "28",
+                                            "type": "text",
+                                            "label": "jobTitle (AC)"
+                                        },
+                                        {
+                                            "name": "29",
+                                            "type": "text",
+                                            "label": "linkedInUrl (AD)"
+                                        },
+                                        {
+                                            "name": "30",
+                                            "type": "text",
+                                            "label": "icebreaker (AE)"
+                                        },
+                                        {
+                                            "name": "31",
+                                            "type": "text",
+                                            "label": "addedToCampaign? (AF)"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Values"
+                                }
+                            ]
+                        },
+                        "valueInputOption": {
+                            "mode": "chose",
+                            "label": "User entered"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "nick@leftclick.ai (nick@leftclick.ai)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valueInputOption",
+                        "type": "select",
+                        "label": "Value input option",
+                        "validate": {
+                            "enum": [
+                                "USER_ENTERED",
+                                "RAW"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Drive",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "file",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "rowNumber",
+                        "type": "uinteger",
+                        "label": "Row number",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "values",
+                        "spec": [
+                            {
+                                "name": "0",
+                                "type": "text",
+                                "label": "id (A)"
+                            },
+                            {
+                                "name": "1",
+                                "type": "text",
+                                "label": "trackingId (B)"
+                            },
+                            {
+                                "name": "2",
+                                "type": "text",
+                                "label": "refId (C)"
+                            },
+                            {
+                                "name": "3",
+                                "type": "text",
+                                "label": "link (D)"
+                            },
+                            {
+                                "name": "4",
+                                "type": "text",
+                                "label": "title (E)"
+                            },
+                            {
+                                "name": "5",
+                                "type": "text",
+                                "label": "companyName (F)"
+                            },
+                            {
+                                "name": "6",
+                                "type": "text",
+                                "label": "companyLinkedinUrl (G)"
+                            },
+                            {
+                                "name": "7",
+                                "type": "text",
+                                "label": "companyLogo (H)"
+                            },
+                            {
+                                "name": "8",
+                                "type": "text",
+                                "label": "location (I)"
+                            },
+                            {
+                                "name": "9",
+                                "type": "text",
+                                "label": "salaryInfoArray (J)"
+                            },
+                            {
+                                "name": "10",
+                                "type": "text",
+                                "label": "postedAt (K)"
+                            },
+                            {
+                                "name": "11",
+                                "type": "text",
+                                "label": "benefitsArray (L)"
+                            },
+                            {
+                                "name": "12",
+                                "type": "text",
+                                "label": "descriptionHtml (M)"
+                            },
+                            {
+                                "name": "13",
+                                "type": "text",
+                                "label": "applicantsCount (N)"
+                            },
+                            {
+                                "name": "14",
+                                "type": "text",
+                                "label": "applyUrl (O)"
+                            },
+                            {
+                                "name": "15",
+                                "type": "text",
+                                "label": "descriptionText (P)"
+                            },
+                            {
+                                "name": "16",
+                                "type": "text",
+                                "label": "seniorityLevel (Q)"
+                            },
+                            {
+                                "name": "17",
+                                "type": "text",
+                                "label": "employmentType (R)"
+                            },
+                            {
+                                "name": "18",
+                                "type": "text",
+                                "label": "jobFunction (S)"
+                            },
+                            {
+                                "name": "19",
+                                "type": "text",
+                                "label": "industries (T)"
+                            },
+                            {
+                                "name": "20",
+                                "type": "text",
+                                "label": "inputUrl (U)"
+                            },
+                            {
+                                "name": "21",
+                                "type": "text",
+                                "label": "companyDescription (V)"
+                            },
+                            {
+                                "name": "22",
+                                "type": "text",
+                                "label": "companyAddressCollection (W)"
+                            },
+                            {
+                                "name": "23",
+                                "type": "text",
+                                "label": "companyWebsite (X)"
+                            },
+                            {
+                                "name": "24",
+                                "type": "text",
+                                "label": "companySlogan (Y)"
+                            },
+                            {
+                                "name": "25",
+                                "type": "text",
+                                "label": "companyEmployeesCount (Z)"
+                            },
+                            {
+                                "name": "26",
+                                "type": "text",
+                                "label": "personFullName (AA)"
+                            },
+                            {
+                                "name": "27",
+                                "type": "text",
+                                "label": "email (AB)"
+                            },
+                            {
+                                "name": "28",
+                                "type": "text",
+                                "label": "jobTitle (AC)"
+                            },
+                            {
+                                "name": "29",
+                                "type": "text",
+                                "label": "linkedInUrl (AD)"
+                            },
+                            {
+                                "name": "30",
+                                "type": "text",
+                                "label": "icebreaker (AE)"
+                            },
+                            {
+                                "name": "31",
+                                "type": "text",
+                                "label": "addedToCampaign? (AF)"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Values"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com"
+    }
+}

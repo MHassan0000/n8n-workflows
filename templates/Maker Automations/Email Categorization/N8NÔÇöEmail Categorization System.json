@@ -1,0 +1,411 @@
+{
+  "name": "1. Email Categorization System",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour",
+              "minute": 1
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4756b076-4514-466c-9890-5e5f77ea26a3",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.text }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Cold Outreach"
+            },
+            {
+              "category": "General Q&A"
+            },
+            {
+              "category": "Gumroad Notifications"
+            },
+            {
+              "category": "Invoices & Receipts"
+            },
+            {
+              "category": "Unknown"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        200,
+        0
+      ],
+      "id": "c6f36620-039e-4033-b396-78a2117b83f8",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        280,
+        240
+      ],
+      "id": "75ba0f0b-3a44-475b-bae0-4720872f04ed",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SXOCwEHgSnrpViKc",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_6798155053573950855"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        -360
+      ],
+      "id": "45081a39-91bd-4c01-893f-87d981e5e9b2",
+      "name": "Label \"Cold Outreach\"",
+      "webhookId": "0d673d8f-7610-4e15-b9b6-27cecdf5c9d6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}\n",
+        "labelIds": [
+          "Label_390960645188590183"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        -180
+      ],
+      "id": "452e1f5f-697a-4c51-9cc7-4916fdee4d0e",
+      "name": "Label \"General Q&A\"",
+      "webhookId": "de484dd1-8e0e-47de-b49f-77e381684008",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_3154266294956819262"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        0
+      ],
+      "id": "219422ff-8795-4275-8c71-8c3a32531286",
+      "name": "Label: \"Gumroad Notifications\"",
+      "webhookId": "dd7596dc-6d0a-4003-8bdd-9cb9a1513528",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_6225207074545671055"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        180
+      ],
+      "id": "6b9e825c-5550-4b0e-9672-277408484778",
+      "name": "Label \"Invoices & Receipts\"",
+      "webhookId": "c13d5a9a-dbf3-4edf-aa6b-e62a5e5f22f4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_7201601631885489480"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        360
+      ],
+      "id": "4d756693-23bf-441b-be66-69857350fe1b",
+      "name": "Label \"Unknown\"",
+      "webhookId": "e58c8199-b817-44fa-9ff3-c437b09fcb69",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        980,
+        -360
+      ],
+      "id": "c54812b6-b675-44c6-9225-b4911fb539f0",
+      "name": "Mark Read",
+      "webhookId": "a8f6d9e1-1907-4a2a-8078-cc4c1dcb510c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        980,
+        0
+      ],
+      "id": "1232efa0-5d93-4041-9d2e-8bf04196ecb7",
+      "name": "Mark Read1",
+      "webhookId": "cee0caed-22fa-4784-9e7d-7c3b5f66a905",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5ZJDodewqOHTwEO1",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Gmail Trigger": [
+      {
+        "json": {
+          "id": "194769920aea7560",
+          "threadId": "194769920aea7560",
+          "labelIds": [
+            "UNREAD",
+            "IMPORTANT",
+            "CATEGORY_PERSONAL",
+            "INBOX"
+          ],
+          "sizeEstimate": 5859,
+          "headers": {
+            "delivered-to": "Delivered-To: nick@leftclick.ai",
+            "received": "Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])\r\n        by mx.google.com with SMTPS id 5b1f17b1804b1-438904201f0sor16543715e9.5.2025.01.17.15.28.54\r\n        for <nick@leftclick.ai>\r\n        (Google Transport Security);\r\n        Fri, 17 Jan 2025 15:28:54 -0800 (PST)",
+            "x-received": "X-Received: by 2002:a05:600c:4ecb:b0:434:ff45:cbbe with SMTP id\r\n 5b1f17b1804b1-438913f5c63mr49373295e9.18.1737156532940; Fri, 17 Jan 2025\r\n 15:28:52 -0800 (PST)",
+            "arc-seal": "ARC-Seal: i=1; a=rsa-sha256; t=1737156534; cv=none;\r\n        d=google.com; s=arc-20240605;\r\n        b=db3+EWejERpKUA1cg40fGb2OsHwz1oAJ8EtNdnWPN65jNp8eSxLlIGwdK4mZ9H9wEF\r\n         mAi0L39+IbLzEw8E5bO83il1NN3G7afYpDzZwZfsP9ylMHGIobDMoXyKjGiXy5e5TsLb\r\n         yhs32WpE8HalDKk4RS+XSDmOI5bL6QLjEIPEnP1CCs3xj8FJ4w8AHCXaE79mwp+pbw04\r\n         BXlUFzxiAd3x/cW40P3Fzw3VkJutBcikQrD1WWZZCk4EcPEwb/94gzEsYbglki6Y1kb6\r\n         j0qnghcBZUMaYcAPJO52R/bW7IINbq4Bi0j6QnKtPUPy+dGJLHpFlBXJfud+Gb28TLki\r\n         tBAA==",
+            "arc-message-signature": "ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;\r\n        h=to:subject:message-id:date:from:mime-version:dkim-signature;\r\n        bh=Ac86dP1SKekxslEMhMPeJWCAfQs++EccIIMggzmrypU=;\r\n        fh=2yhO0gSX430APVtK/Aa+7EZMRAQ6aCI36l/JOb4UghE=;\r\n        b=k9nuL7HzgAam7leTrRSmpSPxcbHPzhxfkKj4vUAa7LQpK4mld3SRHHO0cISmpku4UQ\r\n         RQD6YSf2+c6dNhVIeGD/2foteb2a3D07wBXal5JH4BqvqDP8r+dbefhgeHome4aUdBpK\r\n         RpgH/m7X0QGt4I/5tXUT5B8PTukPnl4fm/7io5w5jb8hDik5fUhZ8E+K/GiAxL88vOpl\r\n         OnvsZnjs6RJQ3KmMWchBMM5s1dQEkLRNd5YrtSS+V1xoDdXTQfro9Iqz7Tj6Cr7PKGg7\r\n         WoFzenUzHf1MGFf9727WneZPeBYOHryDVrc0H66NucgikgZRhRJw98VGRMNczWk4+2xw\r\n         iczw==;\r\n        dara=google.com",
+            "arc-authentication-results": "ARC-Authentication-Results: i=1; mx.google.com;\r\n       dkim=pass header.i=@leftclick-ai.20230601.gappssmtp.com header.s=20230601 header.b=zAHKHPTx;\r\n       spf=pass (google.com: domain of info@leftclick.ai designates 209.85.220.41 as permitted sender) smtp.mailfrom=info@leftclick.ai;\r\n       dmarc=pass (p=QUARANTINE sp=NONE dis=NONE) header.from=leftclick.ai;\r\n       dara=pass header.i=@leftclick.ai",
+            "return-path": "Return-Path: <info@leftclick.ai>",
+            "received-spf": "Received-SPF: pass (google.com: domain of info@leftclick.ai designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;",
+            "authentication-results": "Authentication-Results: mx.google.com;\r\n       dkim=pass header.i=@leftclick-ai.20230601.gappssmtp.com header.s=20230601 header.b=zAHKHPTx;\r\n       spf=pass (google.com: domain of info@leftclick.ai designates 209.85.220.41 as permitted sender) smtp.mailfrom=info@leftclick.ai;\r\n       dmarc=pass (p=QUARANTINE sp=NONE dis=NONE) header.from=leftclick.ai;\r\n       dara=pass header.i=@leftclick.ai",
+            "dkim-signature": "DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\r\n        d=leftclick-ai.20230601.gappssmtp.com; s=20230601; t=1737156533; x=1737761333; darn=leftclick.ai;\r\n        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject\r\n         :date:message-id:reply-to;\r\n        bh=Ac86dP1SKekxslEMhMPeJWCAfQs++EccIIMggzmrypU=;\r\n        b=zAHKHPTxSOAPybDw21i59hi/Gv+z7Sv2UASFvb1ZQupMGUUEHSMqojCuViOgWdx6YI\r\n         t+TD+MXiUmdQPdOlMjMu0Bgt+PQKTpSEtcvlzu/vNYTl2mDC8tUb6BJlLlJ2xWMf9N9Y\r\n         EhjHN3kbZpIGoWHaT8XjfLs3WtB0JGrnBszmktKBCxY6gixFTQMkSkQ89kdUDSD3hyHf\r\n         BdtBMit8IVBihfSJJT8IJExM/nVAi79SlzjxfUIYe9rsu0hjO7Y7N5Wb9NBXGrATIpVL\r\n         O9UGnO1y62Anoa8t4U7LboXTH3PXlUBLYjuqxHh6YenGHlmM6HnFaKUotkmDprkuQ8B1\r\n         r8QA==",
+            "x-google-dkim-signature": "X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\r\n        d=1e100.net; s=20230601; t=1737156533; x=1737761333;\r\n        h=to:subject:message-id:date:from:mime-version:x-gm-message-state\r\n         :from:to:cc:subject:date:message-id:reply-to;\r\n        bh=Ac86dP1SKekxslEMhMPeJWCAfQs++EccIIMggzmrypU=;\r\n        b=rHF/9hrRXoF/5MvlRDoXay7+18MxEHdg2xRKfdYokI6LOQjFajQ6AV14XqsjnD8uNe\r\n         lk2GcXBnlUQy5Ds9yXiV7LwmWsYIt4YgcVc0Wc2U13mKWo15BqwP1KvCeIwSlrbkCvgA\r\n         g3tjxPblKy/8n0TUa3Xheqp/Zt0XR0HzN5+P+BwHQv/m9bevxGdDrJCklwNxGXFqvFhL\r\n         Nzc7YjVvboCS6s6axWdIvM7izYMeLiMOkQFW+m1bAxPHa/jndBI22V8/+HdD++fpN8Xi\r\n         ZUJuUM/qQoNPody15DeAnr9sTrfj78LJiktiBPOO01OSqR+Fu1usAprLiBRjo3Cpav0W\r\n         TMtg==",
+            "x-gm-message-state": "X-Gm-Message-State: AOJu0Yw7xrnY7nuqUPUgxjK6k5r68JeeXHGlAvybd5mn6ULrFyjy8cJT\r\n\t5Kbs/Fu+JMIvVCHwIejQxkQaJVc6wgcGrbnrimAdh7UecW1zP/joENq6vPO6t78w2ikpsidJPDg\r\n\tmLE1c0e8htWN/JMt1r2O2ATUFIgLQ1eFssYa+LD39LWtPvhhKNQt+2gJ7",
+            "x-gm-gg": "X-Gm-Gg: ASbGnctr1J8KyOkRg8x3rxahIVdLyRbogSyfM4eta2Vp8NqmJ94Q5wA++xUHp2UASU3\r\n\tycxTTfE9rBgudZF3P0D15HMwilZIohPgdzcdPofg9RoiD0fZiqC5LlsTlbquYp/xNSQ4M2AcG2f\r\n\t0FyE9UDvCsyw==",
+            "x-google-smtp-source": "X-Google-Smtp-Source: AGHT+IEBsiYNVu7Hpf0wiGDGX27Fi58k0rVTpJz88D/AD6L0jYPQBPpdJE94NiNgkMWWfRyVL6WEetsJ4Xx0xmmJ52A=",
+            "mime-version": "MIME-Version: 1.0",
+            "from": "From: =?UTF-8?Q?LeftClick_=E2=80=8E?= <info@leftclick.ai>",
+            "date": "Date: Fri, 17 Jan 2025 16:28:42 -0700",
+            "x-gm-features": "X-Gm-Features: AbW1kvaOd7oNJp-3NWiERzMGzmLSO_dsfVgphCrMHRz4wv8Dm-sL1AVRfKAcNGw",
+            "message-id": "Message-ID: <CAKFdKGB7P6cQmKnngFYmjTOwC0wXsf-BkGNGG6JuzHxNP=cOag@mail.gmail.com>",
+            "subject": "Subject: Re: Invoice For A39EFLG Processed",
+            "to": "To: nick@leftclick.ai",
+            "content-type": "Content-Type: multipart/alternative; boundary=\"00000000000010cb68062bef46dc\""
+          },
+          "html": "<div dir=\"ltr\">Hello Nick,<br><br>Your invoice for A39EFLG is below. Please see attachment.<br><br>Thank you,<br>Head Office</div>\n",
+          "text": "Hi Nick, just had a general question about XYZ. Would you mind helping me with...",
+          "textAsHtml": "<p>Hello Nick,</p><p>Your invoice for A39EFLG is below. Please see attachment.</p><p>Thank you,<br/>Head Office</p>",
+          "subject": "Re: Invoice For A39EFLG Processed",
+          "date": "2025-01-17T23:28:42.000Z",
+          "to": {
+            "value": [
+              {
+                "address": "nick@leftclick.ai",
+                "name": ""
+              }
+            ],
+            "html": "<span class=\"mp_address_group\"><a href=\"mailto:nick@leftclick.ai\" class=\"mp_address_email\">nick@leftclick.ai</a></span>",
+            "text": "nick@leftclick.ai"
+          },
+          "from": {
+            "value": [
+              {
+                "address": "info@leftclick.ai",
+                "name": "LeftClick ‎"
+              }
+            ],
+            "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">LeftClick &#x200E;</span> &lt;<a href=\"mailto:info@leftclick.ai\" class=\"mp_address_email\">info@leftclick.ai</a>&gt;</span>",
+            "text": "\"LeftClick ‎\" <info@leftclick.ai>"
+          },
+          "messageId": "<CAKFdKGB7P6cQmKnngFYmjTOwC0wXsf-BkGNGG6JuzHxNP=cOag@mail.gmail.com>"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Label \"Cold Outreach\"",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Label \"General Q&A\"",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Label: \"Gumroad Notifications\"",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Label \"Invoices & Receipts\"",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Label \"Unknown\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Label: \"Gumroad Notifications\"": {
+      "main": [
+        [
+          {
+            "node": "Mark Read1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Label \"Cold Outreach\"": {
+      "main": [
+        [
+          {
+            "node": "Mark Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "10a4f38e-c580-420a-903b-3394dc2d89e4",
+  "meta": {
+    "instanceId": "d7661a849ead114a9aa6d9ceaf4160465aeb79532a35bde62160c840ffba9fc8"
+  },
+  "id": "jg5S5eeDEP1Wf1sq",
+  "tags": []
+}

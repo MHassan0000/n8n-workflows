@@ -1,0 +1,2523 @@
+{
+    "name": "1. Instagram Followers Scraper -> Facebook Custom Audience",
+    "flow": [
+        {
+            "id": 8,
+            "module": "apify:finishedActorRuns",
+            "version": 1,
+            "parameters": {
+                "__IMTHOOK__": 1958198
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -1094,
+                    "y": 3
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "label": "Instagram Follower Scraper Completed",
+                            "data": {
+                                "editable": "false"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:apify",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "module": "http:ActionSendData",
+            "version": 3,
+            "parameters": {
+                "handleErrors": true,
+                "useNewZLibDeCompress": true
+            },
+            "mapper": {
+                "url": "https://api.apify.com/v2/key-value-stores/Dh12WWAebG0Ce8Z8T/records/INPUT",
+                "serializeUrl": false,
+                "method": "get",
+                "headers": [
+                    {
+                        "name": "Authorization",
+                        "value": "Bearer apify_api_9I6oVZj6RXMV4QDLoLNSYR4eQzzXJA44WupX"
+                    }
+                ],
+                "qs": [],
+                "bodyType": "raw",
+                "parseResponse": true,
+                "authUser": "",
+                "authPass": "",
+                "timeout": "",
+                "shareCookies": false,
+                "ca": "",
+                "rejectUnauthorized": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "gzip": true,
+                "useMtls": false,
+                "contentType": "application/json",
+                "data": "",
+                "followAllRedirects": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": -811,
+                    "y": 10,
+                    "name": "Get Account Name"
+                },
+                "restore": {
+                    "expect": {
+                        "method": {
+                            "mode": "chose",
+                            "label": "GET"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null
+                            ]
+                        },
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "bodyType": {
+                            "label": "Raw"
+                        },
+                        "contentType": {
+                            "label": "JSON (application/json)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    },
+                    {
+                        "name": "useNewZLibDeCompress",
+                        "type": "hidden"
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "serializeUrl",
+                        "type": "boolean",
+                        "label": "Serialize URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete",
+                                "options"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "type": "array",
+                        "label": "Headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "label": "Name",
+                                "type": "text",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "label": "Value",
+                                "type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "qs",
+                        "type": "array",
+                        "label": "Query String",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "label": "Name",
+                                "type": "text",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "label": "Value",
+                                "type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseResponse",
+                        "type": "boolean",
+                        "label": "Parse response",
+                        "required": true
+                    },
+                    {
+                        "name": "authUser",
+                        "type": "text",
+                        "label": "User name"
+                    },
+                    {
+                        "name": "authPass",
+                        "type": "password",
+                        "label": "Password"
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "ca",
+                        "type": "cert",
+                        "label": "Self-signed certificate"
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "useMtls",
+                        "type": "boolean",
+                        "label": "Use Mutual TLS",
+                        "required": true
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    },
+                    {
+                        "name": "followAllRedirects",
+                        "type": "boolean",
+                        "label": "Follow all redirect",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "module": "facebook-custom-audiences:CreateCustomAudience",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 2811824
+            },
+            "mapper": {
+                "business": "3285152778409873",
+                "name": "{{9.data.username}}",
+                "description": "Scraped from Apify using {{9.data.username}}'s followers.",
+                "adAccount": "1031196604726425"
+            },
+            "metadata": {
+                "designer": {
+                    "x": -528,
+                    "y": 8,
+                    "name": "Create Custom Audience"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Nick's Facebook Page (Nick Saraev)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "facebook"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "business": {
+                            "mode": "chose",
+                            "label": "LeftClick"
+                        },
+                        "adAccount": {
+                            "mode": "chose",
+                            "label": "LeftClick"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:facebook",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "business",
+                        "type": "select",
+                        "label": "Business Manager",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Name",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "type": "text",
+                        "label": "Description"
+                    },
+                    {
+                        "name": "adAccount",
+                        "type": "select",
+                        "label": "Ad Account",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 1,
+            "module": "apify:fetchDatasetItems",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 2721790
+            },
+            "mapper": {
+                "datasetId": "{{8.defaultDatasetId}}",
+                "type": "clean",
+                "format": "json",
+                "limit": "10000"
+            },
+            "metadata": {
+                "designer": {
+                    "x": -228,
+                    "y": 9
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "nickolassaraev@gmail.com",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "apify"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "type": {
+                            "mode": "chose",
+                            "label": "Clean"
+                        },
+                        "format": {
+                            "mode": "chose",
+                            "label": "JSON"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:apify",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "datasetId",
+                        "type": "text",
+                        "label": "Dataset ID",
+                        "required": true
+                    },
+                    {
+                        "name": "type",
+                        "type": "select",
+                        "label": "Data transformation",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "clean",
+                                "simplified",
+                                "none"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "format",
+                        "type": "select",
+                        "label": "Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "json",
+                                "csv",
+                                "html",
+                                "xml",
+                                "rss",
+                                "xlsx"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit",
+                        "validate": {
+                            "max": 100000,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "type": "uinteger",
+                        "label": "Offset",
+                        "validate": {
+                            "min": 0
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "openai-gpt-3:CreateCompletion",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 1134482
+            },
+            "mapper": {
+                "select": "chat",
+                "temperature": "1",
+                "top_p": "1",
+                "n_completions": "1",
+                "model": "gpt-4o-mini",
+                "max_tokens": "2048",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are a helpful, intelligent writing assistant."
+                    },
+                    {
+                        "role": "user",
+                        "content": "We are reviewing a list of Instagram profiles.\n\nYour task is to determine whether or not a provided input is a real name. Since users on Instagram can set their names to whatever they want, our goal is to filter out names that are clearly fake or fictional.\n\nRules:\n- If a profile doesn't include a real name, leave all JSON fields empty.\n- For \"gen\", attempt to determine whether or not the name seems male or female. If male, enter M. If it seems female, enter F.\n\nOutput your response in JSON using this format:\n\n{\"verdict\":\"true or false\", \"firstName\":\"first name or empty\",\"lastName\":\"last name or empty\", \"fullName\":\"full name or empty\",\"gen\":\"M or F\"}",
+                        "imageDetail": "auto"
+                    },
+                    {
+                        "role": "user",
+                        "content": "{\"instagramName\":\"{{1.full_name}}\"}",
+                        "imageDetail": "auto"
+                    }
+                ],
+                "response_format": "json_object",
+                "parseJSONResponse": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 67,
+                    "y": 11,
+                    "name": "Filter & Extract Names"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "1SecondCopy",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "openai-gpt-3"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "select": {
+                            "label": "Create a Chat Completion (GPT and o1 models)"
+                        },
+                        "logit_bias": {
+                            "mode": "chose"
+                        },
+                        "stop": {
+                            "mode": "chose"
+                        },
+                        "additionalParameters": {
+                            "mode": "chose"
+                        },
+                        "model": {
+                            "mode": "chose",
+                            "label": "gpt-4o-mini (system)"
+                        },
+                        "messages": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "System"
+                                    }
+                                },
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    },
+                                    "imageInputType": {
+                                        "mode": "chose",
+                                        "label": "Empty"
+                                    },
+                                    "imageDetail": {
+                                        "mode": "chose",
+                                        "label": "Auto"
+                                    }
+                                },
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    },
+                                    "imageInputType": {
+                                        "mode": "chose",
+                                        "label": "Empty"
+                                    },
+                                    "imageDetail": {
+                                        "mode": "chose",
+                                        "label": "Auto"
+                                    }
+                                }
+                            ]
+                        },
+                        "response_format": {
+                            "mode": "chose",
+                            "label": "JSON Object"
+                        },
+                        "parseJSONResponse": {
+                            "mode": "chose"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:openai-gpt-3",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Select Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "chat",
+                                "prompt"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "temperature",
+                        "type": "number",
+                        "label": "Temperature",
+                        "validate": {
+                            "max": 2,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "top_p",
+                        "type": "number",
+                        "label": "Top P",
+                        "validate": {
+                            "max": 1,
+                            "min": 0
+                        }
+                    },
+                    {
+                        "name": "n_completions",
+                        "type": "number",
+                        "label": "Number"
+                    },
+                    {
+                        "name": "frequency_penalty",
+                        "type": "number",
+                        "label": "Frequency Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "presence_penalty",
+                        "type": "number",
+                        "label": "Presence Penalty",
+                        "validate": {
+                            "max": 2,
+                            "min": -2
+                        }
+                    },
+                    {
+                        "name": "logit_bias",
+                        "type": "array",
+                        "label": "Token Probability",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "token",
+                                    "type": "text",
+                                    "label": "Token ID",
+                                    "required": true
+                                },
+                                {
+                                    "name": "probability",
+                                    "type": "number",
+                                    "label": "Probability",
+                                    "required": true,
+                                    "validate": {
+                                        "max": 100,
+                                        "min": -100
+                                    }
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Token Probability",
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "seed",
+                        "type": "integer",
+                        "label": "Seed"
+                    },
+                    {
+                        "name": "stop",
+                        "type": "array",
+                        "label": "Stop Sequences",
+                        "validate": {
+                            "maxItems": 4
+                        },
+                        "spec": {
+                            "type": "text",
+                            "label": "Stop Sequence",
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "additionalParameters",
+                        "type": "array",
+                        "label": "Other Input Parameters",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "key",
+                                    "type": "text",
+                                    "label": "Parameter Name",
+                                    "required": true
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "select",
+                                    "label": "Input Type",
+                                    "options": [
+                                        {
+                                            "label": "Text",
+                                            "value": "text",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ],
+                                            "default": true
+                                        },
+                                        {
+                                            "label": "Number",
+                                            "value": "number",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "number",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Boolean",
+                                            "value": "boolean",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "boolean",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Date",
+                                            "value": "date",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "date",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "label": "Any",
+                                            "value": "any",
+                                            "nested": [
+                                                {
+                                                    "name": "value",
+                                                    "type": "any",
+                                                    "label": "Parameter Value"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "type": "collection",
+                            "label": "Input Parameter",
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "Model",
+                        "required": true
+                    },
+                    {
+                        "name": "max_tokens",
+                        "type": "uinteger",
+                        "label": "Max Completion Tokens"
+                    },
+                    {
+                        "name": "messages",
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true,
+                        "spec": {
+                            "label": "Message",
+                            "type": "collection",
+                            "spec": [
+                                {
+                                    "name": "role",
+                                    "type": "select",
+                                    "label": "Role",
+                                    "required": true,
+                                    "options": {
+                                        "store": [
+                                            {
+                                                "label": "System",
+                                                "value": "system",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "User",
+                                                "value": "user",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    },
+                                                    {
+                                                        "name": "imageInputType",
+                                                        "type": "select",
+                                                        "label": "Image Input Type",
+                                                        "mappable": false,
+                                                        "options": [
+                                                            {
+                                                                "value": "url",
+                                                                "label": "URL",
+                                                                "nested": [
+                                                                    {
+                                                                        "name": "imageUrl",
+                                                                        "label": "Image URL",
+                                                                        "type": "url",
+                                                                        "help": "Make sure to use a publically accessible URL.\nYou can test if your image is publically accessible by opening the link in an incognito tab."
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "value": "file",
+                                                                "label": "Image File",
+                                                                "nested": [
+                                                                    {
+                                                                        "name": "imageFile",
+                                                                        "label": "Image",
+                                                                        "type": "collection",
+                                                                        "spec": [
+                                                                            {
+                                                                                "name": "imageFilename",
+                                                                                "type": "filename",
+                                                                                "label": "Image Filename",
+                                                                                "semantic": "file:name",
+                                                                                "extension": [
+                                                                                    "jpg",
+                                                                                    "jpeg",
+                                                                                    "png",
+                                                                                    "webp",
+                                                                                    "gif"
+                                                                                ],
+                                                                                "help": "Accepted extensions: `.jpg`, `.jpeg`, `.png`, `.webp` and `.gif`."
+                                                                            },
+                                                                            {
+                                                                                "name": "imageData",
+                                                                                "type": "buffer",
+                                                                                "label": "Image Data",
+                                                                                "semantic": "file:data"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "name": "imageDetail",
+                                                        "type": "select",
+                                                        "label": "Image Detail",
+                                                        "advanced": true,
+                                                        "options": [
+                                                            {
+                                                                "value": "auto",
+                                                                "default": true,
+                                                                "label": "Auto"
+                                                            },
+                                                            {
+                                                                "value": "high",
+                                                                "label": "High"
+                                                            },
+                                                            {
+                                                                "value": "low",
+                                                                "label": "Low"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Assistant",
+                                                "value": "assistant",
+                                                "nested": [
+                                                    {
+                                                        "help": "Text content of the message on behalf of the selected __Role__.",
+                                                        "name": "content",
+                                                        "type": "text",
+                                                        "label": "Text Content"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "name": "value"
+                        }
+                    },
+                    {
+                        "name": "response_format",
+                        "type": "select",
+                        "label": "Response Format",
+                        "validate": {
+                            "enum": [
+                                "text",
+                                "json_object"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "parseJSONResponse",
+                        "type": "boolean",
+                        "label": "Parse JSON Response",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "result",
+                        "type": "any",
+                        "label": "Result"
+                    },
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                    },
+                    {
+                        "name": "object",
+                        "type": "text",
+                        "label": "Object"
+                    },
+                    {
+                        "name": "created",
+                        "type": "date",
+                        "label": "Created"
+                    },
+                    {
+                        "name": "model",
+                        "type": "text",
+                        "label": "Model"
+                    },
+                    {
+                        "name": "choices",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "text",
+                                    "type": "text",
+                                    "label": "Text"
+                                },
+                                {
+                                    "name": "index",
+                                    "type": "number",
+                                    "label": "Index"
+                                },
+                                {
+                                    "name": "logprobs",
+                                    "type": "text",
+                                    "label": "Log Probs"
+                                },
+                                {
+                                    "name": "finish_reason",
+                                    "type": "text",
+                                    "label": "Finish Reason"
+                                },
+                                {
+                                    "name": "message",
+                                    "spec": [
+                                        {
+                                            "name": "role",
+                                            "type": "text",
+                                            "label": "Role"
+                                        },
+                                        {
+                                            "name": "content",
+                                            "type": "text",
+                                            "label": "Content"
+                                        },
+                                        {
+                                            "name": "refusal",
+                                            "type": "text",
+                                            "label": "Refusal"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Message"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Choices"
+                    },
+                    {
+                        "name": "usage",
+                        "spec": [
+                            {
+                                "name": "prompt_tokens",
+                                "type": "number",
+                                "label": "Prompt Tokens"
+                            },
+                            {
+                                "name": "completion_tokens",
+                                "type": "text",
+                                "label": "Completion Tokens"
+                            },
+                            {
+                                "name": "total_tokens",
+                                "type": "number",
+                                "label": "Total Tokens"
+                            },
+                            {
+                                "name": "prompt_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "cached_tokens",
+                                        "type": "uinteger",
+                                        "label": "Cached Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "image_tokens",
+                                        "type": "uinteger",
+                                        "label": "Image Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Prompt Tokens Details"
+                            },
+                            {
+                                "name": "completion_tokens_details",
+                                "spec": [
+                                    {
+                                        "name": "reasoning_tokens",
+                                        "type": "uinteger",
+                                        "label": "Reasoning Tokens"
+                                    },
+                                    {
+                                        "name": "text_tokens",
+                                        "type": "uinteger",
+                                        "label": "Text Tokens"
+                                    },
+                                    {
+                                        "name": "audio_tokens",
+                                        "type": "uinteger",
+                                        "label": "Audio Tokens"
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Completion Tokens Details"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Usage"
+                    },
+                    {
+                        "name": "system_fingerprint",
+                        "type": "text",
+                        "label": "System Fingerprint"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 3,
+            "module": "google-sheets:filterRows",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 1548308
+            },
+            "filter": {
+                "name": "Name?",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{2.result.verdict}}",
+                            "o": "text:equal",
+                            "b": "true"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "from": "drive",
+                "valueRenderOption": "FORMATTED_VALUE",
+                "dateTimeRenderOption": "FORMATTED_STRING",
+                "limit": "1",
+                "spreadsheetId": "1GQzYuJb-IQ1sOwO1HWlMtClQD0XyokG2Bw0yRi2kIas",
+                "sheetId": "Sheet1",
+                "includesHeaders": true,
+                "tableFirstRow": "A1:CZ1",
+                "filter": [
+                    [
+                        {
+                            "a": "A",
+                            "o": "text:equal",
+                            "b": "{{2.result.firstName}}"
+                        },
+                        {
+                            "a": "B",
+                            "o": "text:equal",
+                            "b": "{{2.result.lastName}}"
+                        },
+                        {
+                            "a": "C",
+                            "o": "text:equal",
+                            "b": "{{2.result.gen}}"
+                        }
+                    ]
+                ],
+                "sortOrder": "asc"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 361,
+                    "y": 11,
+                    "name": "Search if Exists"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "nick@leftclick.ai (nick@leftclick.ai)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "from": {
+                            "label": "Select from My Drive"
+                        },
+                        "valueRenderOption": {
+                            "mode": "chose",
+                            "label": "Formatted value"
+                        },
+                        "dateTimeRenderOption": {
+                            "mode": "chose",
+                            "label": "Formatted string"
+                        },
+                        "spreadsheetId": {
+                            "mode": "chose",
+                            "label": "Custom Audience Database"
+                        },
+                        "sheetId": {
+                            "mode": "chose",
+                            "label": "Sheet1"
+                        },
+                        "includesHeaders": {
+                            "mode": "chose",
+                            "label": "Yes"
+                        },
+                        "tableFirstRow": {
+                            "label": "A-CZ"
+                        },
+                        "orderBy": {
+                            "mode": "chose"
+                        },
+                        "sortOrder": {
+                            "mode": "chose",
+                            "label": "Ascending"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "valueRenderOption",
+                        "type": "select",
+                        "label": "Value render option",
+                        "validate": {
+                            "enum": [
+                                "FORMATTED_VALUE",
+                                "UNFORMATTED_VALUE",
+                                "FORMULA"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "dateTimeRenderOption",
+                        "type": "select",
+                        "label": "Date and time render option",
+                        "validate": {
+                            "enum": [
+                                "SERIAL_NUMBER",
+                                "FORMATTED_STRING"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit"
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "select",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tableFirstRow",
+                        "type": "select",
+                        "label": "Column range",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "A1:Z1",
+                                "A1:BZ1",
+                                "A1:CZ1",
+                                "A1:DZ1",
+                                "A1:MZ1",
+                                "A1:ZZ1",
+                                "A1:AZZ1",
+                                "A1:BZZ1",
+                                "A1:CZZ1",
+                                "A1:DZZ1",
+                                "A1:MZZ1",
+                                "A1:ZZZ1"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "type": "filter",
+                        "label": "Filter",
+                        "options": "rpc://google-sheets/2/rpcGetFilterKeys?includesHeaders=true"
+                    },
+                    {
+                        "name": "orderBy",
+                        "type": "select",
+                        "label": "Order by"
+                    },
+                    {
+                        "name": "sortOrder",
+                        "type": "select",
+                        "label": "Sort order",
+                        "validate": {
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "__ROW_NUMBER__",
+                        "label": "Row number",
+                        "type": "number"
+                    },
+                    {
+                        "name": "__SPREADSHEET_ID__",
+                        "label": "Spreadsheet ID",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__SHEET__",
+                        "label": "Sheet",
+                        "type": "text"
+                    },
+                    {
+                        "name": "0",
+                        "label": "fn (A)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "1",
+                        "label": "ln (B)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "2",
+                        "label": "gen (C)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "3",
+                        "label": "accountScrapedFrom (D)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "4",
+                        "label": "(E)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "5",
+                        "label": "(F)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "6",
+                        "label": "(G)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "7",
+                        "label": "(H)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "8",
+                        "label": "(I)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "9",
+                        "label": "(J)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "10",
+                        "label": "(K)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "11",
+                        "label": "(L)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "12",
+                        "label": "(M)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "13",
+                        "label": "(N)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "14",
+                        "label": "(O)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "15",
+                        "label": "(P)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "16",
+                        "label": "(Q)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "17",
+                        "label": "(R)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "18",
+                        "label": "(S)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "19",
+                        "label": "(T)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "20",
+                        "label": "(U)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "21",
+                        "label": "(V)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "22",
+                        "label": "(W)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "23",
+                        "label": "(X)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "24",
+                        "label": "(Y)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "25",
+                        "label": "(Z)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "26",
+                        "label": "(AA)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "27",
+                        "label": "(AB)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "28",
+                        "label": "(AC)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "29",
+                        "label": "(AD)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "30",
+                        "label": "(AE)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "31",
+                        "label": "(AF)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "32",
+                        "label": "(AG)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "33",
+                        "label": "(AH)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "34",
+                        "label": "(AI)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "35",
+                        "label": "(AJ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "36",
+                        "label": "(AK)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "37",
+                        "label": "(AL)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "38",
+                        "label": "(AM)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "39",
+                        "label": "(AN)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "40",
+                        "label": "(AO)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "41",
+                        "label": "(AP)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "42",
+                        "label": "(AQ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "43",
+                        "label": "(AR)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "44",
+                        "label": "(AS)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "45",
+                        "label": "(AT)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "46",
+                        "label": "(AU)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "47",
+                        "label": "(AV)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "48",
+                        "label": "(AW)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "49",
+                        "label": "(AX)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "50",
+                        "label": "(AY)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "51",
+                        "label": "(AZ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "52",
+                        "label": "(BA)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "53",
+                        "label": "(BB)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "54",
+                        "label": "(BC)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "55",
+                        "label": "(BD)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "56",
+                        "label": "(BE)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "57",
+                        "label": "(BF)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "58",
+                        "label": "(BG)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "59",
+                        "label": "(BH)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "60",
+                        "label": "(BI)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "61",
+                        "label": "(BJ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "62",
+                        "label": "(BK)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "63",
+                        "label": "(BL)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "64",
+                        "label": "(BM)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "65",
+                        "label": "(BN)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "66",
+                        "label": "(BO)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "67",
+                        "label": "(BP)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "68",
+                        "label": "(BQ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "69",
+                        "label": "(BR)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "70",
+                        "label": "(BS)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "71",
+                        "label": "(BT)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "72",
+                        "label": "(BU)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "73",
+                        "label": "(BV)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "74",
+                        "label": "(BW)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "75",
+                        "label": "(BX)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "76",
+                        "label": "(BY)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "77",
+                        "label": "(BZ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "78",
+                        "label": "(CA)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "79",
+                        "label": "(CB)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "80",
+                        "label": "(CC)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "81",
+                        "label": "(CD)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "82",
+                        "label": "(CE)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "83",
+                        "label": "(CF)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "84",
+                        "label": "(CG)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "85",
+                        "label": "(CH)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "86",
+                        "label": "(CI)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "87",
+                        "label": "(CJ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "88",
+                        "label": "(CK)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "89",
+                        "label": "(CL)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "90",
+                        "label": "(CM)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "91",
+                        "label": "(CN)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "92",
+                        "label": "(CO)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "93",
+                        "label": "(CP)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "94",
+                        "label": "(CQ)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "95",
+                        "label": "(CR)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "96",
+                        "label": "(CS)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "97",
+                        "label": "(CT)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "98",
+                        "label": "(CU)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "99",
+                        "label": "(CV)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "100",
+                        "label": "(CW)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "101",
+                        "label": "(CX)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "102",
+                        "label": "(CY)",
+                        "type": "text"
+                    },
+                    {
+                        "name": "103",
+                        "label": "(CZ)",
+                        "type": "text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "module": "google-sheets:addRow",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 1548308
+            },
+            "filter": {
+                "name": "New?",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{3.`__IMTLENGTH__`}}",
+                            "o": "text:equal",
+                            "b": "0"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "mode": "select",
+                "insertUnformatted": false,
+                "valueInputOption": "USER_ENTERED",
+                "insertDataOption": "INSERT_ROWS",
+                "from": "drive",
+                "spreadsheetId": "/1GQzYuJb-IQ1sOwO1HWlMtClQD0XyokG2Bw0yRi2kIas",
+                "sheetId": "Sheet1",
+                "includesHeaders": true,
+                "values": {
+                    "0": "{{2.result.firstName}}",
+                    "1": "{{2.result.lastName}}",
+                    "2": "{{2.result.gen}}",
+                    "3": "{{9.data.username}}"
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 669,
+                    "y": 15,
+                    "name": "Add to DB"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "nick@leftclick.ai (nick@leftclick.ai)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "mode": {
+                            "label": "Search by path"
+                        },
+                        "insertUnformatted": {
+                            "mode": "chose"
+                        },
+                        "valueInputOption": {
+                            "mode": "chose",
+                            "label": "User entered"
+                        },
+                        "insertDataOption": {
+                            "mode": "chose",
+                            "label": "Insert rows"
+                        },
+                        "from": {
+                            "label": "My Drive"
+                        },
+                        "spreadsheetId": {
+                            "path": [
+                                "Custom Audience Database"
+                            ]
+                        },
+                        "sheetId": {
+                            "label": "Sheet1"
+                        },
+                        "includesHeaders": {
+                            "nested": [
+                                {
+                                    "name": "values",
+                                    "label": "Values",
+                                    "type": "collection",
+                                    "spec": [
+                                        {
+                                            "name": "0",
+                                            "label": "fn (A)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "1",
+                                            "label": "ln (B)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "2",
+                                            "label": "gen (C)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "3",
+                                            "label": "appuid (D)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "4",
+                                            "label": "(E)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "5",
+                                            "label": "(F)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "6",
+                                            "label": "(G)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "7",
+                                            "label": "(H)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "8",
+                                            "label": "(I)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "9",
+                                            "label": "(J)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "10",
+                                            "label": "(K)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "11",
+                                            "label": "(L)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "12",
+                                            "label": "(M)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "13",
+                                            "label": "(N)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "14",
+                                            "label": "(O)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "15",
+                                            "label": "(P)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "16",
+                                            "label": "(Q)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "17",
+                                            "label": "(R)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "18",
+                                            "label": "(S)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "19",
+                                            "label": "(T)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "20",
+                                            "label": "(U)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "21",
+                                            "label": "(V)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "22",
+                                            "label": "(W)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "23",
+                                            "label": "(X)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "24",
+                                            "label": "(Y)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "25",
+                                            "label": "(Z)",
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "label": "Yes"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "mode",
+                        "type": "select",
+                        "label": "Search Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "select",
+                                "fromAll",
+                                "map"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertUnformatted",
+                        "type": "boolean",
+                        "label": "Unformatted",
+                        "required": true
+                    },
+                    {
+                        "name": "valueInputOption",
+                        "type": "select",
+                        "label": "Value input option",
+                        "validate": {
+                            "enum": [
+                                "USER_ENTERED",
+                                "RAW"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "insertDataOption",
+                        "type": "select",
+                        "label": "Insert data option",
+                        "validate": {
+                            "enum": [
+                                "INSERT_ROWS",
+                                "OVERWRITE"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "select",
+                        "label": "Drive",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "spreadsheetId",
+                        "type": "file",
+                        "label": "Spreadsheet ID",
+                        "required": true
+                    },
+                    {
+                        "name": "sheetId",
+                        "type": "select",
+                        "label": "Sheet Name",
+                        "required": true
+                    },
+                    {
+                        "name": "includesHeaders",
+                        "type": "select",
+                        "label": "Table contains headers",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    {
+                        "name": "values",
+                        "type": "collection",
+                        "label": "Values",
+                        "spec": [
+                            {
+                                "name": "0",
+                                "type": "text",
+                                "label": "fn (A)"
+                            },
+                            {
+                                "name": "1",
+                                "type": "text",
+                                "label": "ln (B)"
+                            },
+                            {
+                                "name": "2",
+                                "type": "text",
+                                "label": "gen (C)"
+                            },
+                            {
+                                "name": "3",
+                                "type": "text",
+                                "label": "appuid (D)"
+                            },
+                            {
+                                "name": "4",
+                                "type": "text",
+                                "label": "(E)"
+                            },
+                            {
+                                "name": "5",
+                                "type": "text",
+                                "label": "(F)"
+                            },
+                            {
+                                "name": "6",
+                                "type": "text",
+                                "label": "(G)"
+                            },
+                            {
+                                "name": "7",
+                                "type": "text",
+                                "label": "(H)"
+                            },
+                            {
+                                "name": "8",
+                                "type": "text",
+                                "label": "(I)"
+                            },
+                            {
+                                "name": "9",
+                                "type": "text",
+                                "label": "(J)"
+                            },
+                            {
+                                "name": "10",
+                                "type": "text",
+                                "label": "(K)"
+                            },
+                            {
+                                "name": "11",
+                                "type": "text",
+                                "label": "(L)"
+                            },
+                            {
+                                "name": "12",
+                                "type": "text",
+                                "label": "(M)"
+                            },
+                            {
+                                "name": "13",
+                                "type": "text",
+                                "label": "(N)"
+                            },
+                            {
+                                "name": "14",
+                                "type": "text",
+                                "label": "(O)"
+                            },
+                            {
+                                "name": "15",
+                                "type": "text",
+                                "label": "(P)"
+                            },
+                            {
+                                "name": "16",
+                                "type": "text",
+                                "label": "(Q)"
+                            },
+                            {
+                                "name": "17",
+                                "type": "text",
+                                "label": "(R)"
+                            },
+                            {
+                                "name": "18",
+                                "type": "text",
+                                "label": "(S)"
+                            },
+                            {
+                                "name": "19",
+                                "type": "text",
+                                "label": "(T)"
+                            },
+                            {
+                                "name": "20",
+                                "type": "text",
+                                "label": "(U)"
+                            },
+                            {
+                                "name": "21",
+                                "type": "text",
+                                "label": "(V)"
+                            },
+                            {
+                                "name": "22",
+                                "type": "text",
+                                "label": "(W)"
+                            },
+                            {
+                                "name": "23",
+                                "type": "text",
+                                "label": "(X)"
+                            },
+                            {
+                                "name": "24",
+                                "type": "text",
+                                "label": "(Y)"
+                            },
+                            {
+                                "name": "25",
+                                "type": "text",
+                                "label": "(Z)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "module": "facebook-custom-audiences:AddUsersToCustomAudience",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 2811824
+            },
+            "mapper": {
+                "business": "3285152778409873",
+                "data": [
+                    {
+                        "gen": "{{lower(2.result.gen)}}",
+                        "fn": "{{2.result.firstName}}",
+                        "ln": "{{2.result.lastName}}"
+                    }
+                ],
+                "adAccount": "1031196604726425",
+                "customAudience": "{{6.id}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 960,
+                    "y": 12,
+                    "name": "Add User to Custom Audience"
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "label": "Nick's Facebook Page (Nick Saraev)",
+                            "data": {
+                                "scoped": "true",
+                                "connection": "facebook"
+                            }
+                        }
+                    },
+                    "expect": {
+                        "business": {
+                            "mode": "chose",
+                            "label": "LeftClick"
+                        },
+                        "data": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "gen": {
+                                        "mode": "edit"
+                                    }
+                                }
+                            ]
+                        },
+                        "adAccount": {
+                            "mode": "chose",
+                            "label": "LeftClick"
+                        },
+                        "customAudience": {
+                            "mode": "edit"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:facebook",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "business",
+                        "type": "select",
+                        "label": "Business Manager",
+                        "required": true
+                    },
+                    {
+                        "name": "data",
+                        "type": "array",
+                        "label": "Data",
+                        "required": true,
+                        "spec": [
+                            {
+                                "name": "email",
+                                "type": "email",
+                                "label": "Email"
+                            },
+                            {
+                                "name": "phone",
+                                "type": "text",
+                                "label": "Phone"
+                            },
+                            {
+                                "name": "gen",
+                                "type": "select",
+                                "label": "Gender",
+                                "options": [
+                                    {
+                                        "label": "male",
+                                        "value": "m"
+                                    },
+                                    {
+                                        "label": "female",
+                                        "value": "f"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "doby",
+                                "type": "text",
+                                "label": "Birth year",
+                                "validate": {
+                                    "pattern": "(19|20)[0-9]{2}"
+                                }
+                            },
+                            {
+                                "name": "dobm",
+                                "type": "text",
+                                "label": "Birth month",
+                                "validate": {
+                                    "pattern": "[0-9]{2}"
+                                }
+                            },
+                            {
+                                "name": "dobd",
+                                "type": "text",
+                                "label": "Birth day",
+                                "validate": {
+                                    "pattern": "[0-9]{2}"
+                                }
+                            },
+                            {
+                                "name": "fn",
+                                "type": "text",
+                                "label": "First name"
+                            },
+                            {
+                                "name": "ln",
+                                "type": "text",
+                                "label": "Last name"
+                            },
+                            {
+                                "name": "fi",
+                                "type": "text",
+                                "label": "First name initial"
+                            },
+                            {
+                                "name": "st",
+                                "type": "text",
+                                "label": "State"
+                            },
+                            {
+                                "name": "ct",
+                                "type": "text",
+                                "label": "City"
+                            },
+                            {
+                                "name": "zip",
+                                "type": "text",
+                                "label": "ZIP"
+                            },
+                            {
+                                "name": "country",
+                                "type": "text",
+                                "label": "Country",
+                                "validate": {
+                                    "pattern": "[a-zA-Z]{2}"
+                                }
+                            },
+                            {
+                                "name": "madid",
+                                "type": "text",
+                                "label": "Mobile advertiser ID"
+                            },
+                            {
+                                "name": "extern_id",
+                                "type": "text",
+                                "label": "External ID"
+                            },
+                            {
+                                "name": "lookalike_value",
+                                "type": "number",
+                                "label": "Lookalike Value"
+                            },
+                            {
+                                "name": "pageuid",
+                                "type": "number",
+                                "label": "Page Scoped User ID"
+                            },
+                            {
+                                "name": "page_id",
+                                "type": "number",
+                                "label": "Page ID"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "adAccount",
+                        "type": "select",
+                        "label": "Ad Account",
+                        "required": true
+                    },
+                    {
+                        "name": "customAudience",
+                        "type": "select",
+                        "label": "Custom Audience",
+                        "required": true
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com"
+    }
+}
